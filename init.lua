@@ -43,6 +43,7 @@ What is Kickstart?
 
 Kickstart Guide:
 
+
   TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
 
     If you don't know what this means, type the following:
@@ -907,6 +908,53 @@ require('lazy').setup({
     },
   },
 })
+
+-- vim.keymap.set('n', '<C-_>', function()
+--   require('Comment.api').toggle.blockwise.current()
+-- end, { noremap = true, silent = true })
+local api = require 'Comment.api'
+local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+vim.keymap.set('x', '<C-_>', function()
+  vim.api.nvim_feedkeys(esc, 'nx', false)
+  api.toggle.linewise(vim.fn.visualmode())
+end)
+vim.keymap.set('n', '<C-_>', function()
+  api.toggle.linewise.current()
+end)
+
+-- ~/.config/nvim/init.lua or wherever you have your lazy.nvim setup
+-- -- ~/.config/nvim/init.lua
+
+require('lazy').setup {
+  { 'nvim-lua/plenary.nvim' },
+  -- Add other plugins here
+}
+
+-- Import necessary modules from plenary
+local Path = require 'plenary.path'
+local scan = require 'plenary.scandir'
+
+-- Helper function to get the file extension
+local function get_extension(filename)
+  return filename:match '^.+(%..+)$'
+end
+
+-- Helper function to get the base name (without extension)
+local function get_base_name(filename)
+  return filename:match '(.+)%..+$'
+end
+
+function OwlNavigate()
+  local current_file = vim.fn.expand '%:p'
+  local extension = get_extension(current_file)
+  local base_name = get_base_name(current_file)
+  local target_extension = extension == '.xml' and '.js' or '.xml'
+  -- local target_file = base_name .. target_extension
+  vim.cmd('edit ' .. base_name .. target_extension)
+end
+
+-- Set up key binding for navigation
+vim.api.nvim_set_keymap('n', '<leader>n', ':lua OwlNavigate()<CR>', { noremap = true, silent = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
