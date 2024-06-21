@@ -955,6 +955,10 @@ end
 
 -- Set up key binding for navigation
 vim.api.nvim_set_keymap('n', '<leader>n', ':lua OwlNavigate()<CR>', { noremap = true, silent = true })
+vim.opt['tabstop'] = 4
+vim.opt['shiftwidth'] = 4
+
+require 'my_config'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
