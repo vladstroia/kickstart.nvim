@@ -12,21 +12,21 @@ return {
         local function map(mode, l, r, opts)
           opts = opts or {}
           opts.buffer = bufnr
-          vim.keymap.set(mode, l, r, opts)
+          vim21.keymap.set(mode, l, r, opts)
         end
 
         -- Navigation
         map('n', ']c', function()
-          if vim.wo.diff then
-            vim.cmd.normal { ']c', bang = true }
+          if vim21.wo.diff then
+            vim21.cmd.normal { ']c', bang = true }
           else
             gitsigns.nav_hunk 'next'
           end
         end, { desc = 'Jump to next git [c]hange' })
 
         map('n', '[c', function()
-          if vim.wo.diff then
-            vim.cmd.normal { '[c', bang = true }
+          if vim21.wo.diff then
+            vim21.cmd.normal { '[c', bang = true }
           else
             gitsigns.nav_hunk 'prev'
           end
@@ -35,10 +35,10 @@ return {
         -- Actions
         -- visual mode
         map('v', '<leader>hs', function()
-          gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+          gitsigns.stage_hunk { vim21.fn.line '.', vim21.fn.line 'v' }
         end, { desc = 'stage git hunk' })
         map('v', '<leader>hr', function()
-          gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
+          gitsigns.reset_hunk { vim21.fn.line '.', vim21.fn.line 'v' }
         end, { desc = 'reset git hunk' })
         -- normal mode
         map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
