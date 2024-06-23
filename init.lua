@@ -7,16 +7,22 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+local function toggle_line_numbers()
+  local number = vim.wo.number
+  local relativenumber = vim.wo.relativenumber
 
--- Make line numbers default
-vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+  if number or relativenumber then
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+    print 'Line numbers: OFF'
+  else
+    vim.opt.number = true
+    vim.opt.relativenumber = true
+    print 'Line numbers: ON'
+  end
+end
+vim.api.nvim_create_user_command('ToggleLineNumbers', toggle_line_numbers, {})
+vim.keymap.set('n', '<leader>tn', ':ToggleLineNumbers<CR>', { noremap = true, silent = true, desc = 'Toggle Line Numbers' })
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'

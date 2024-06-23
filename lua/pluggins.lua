@@ -1,13 +1,6 @@
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
   -- Use `opts = {}` to force a plugin to be loaded.
-  --
   --  This is equivalent to:
   --    require('Comment').setup({})
 
@@ -517,16 +510,23 @@ require('lazy').setup({
       }
     end,
   },
-
+  -- lazy
   {
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.hi 'Comment gui=none'
+    'askfiy/visual_studio_code',
+    priority = 100,
+    config = function()
+      vim.cmd [[colorscheme visual_studio_code]]
     end,
   },
+  -- {
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
 
   {
     'folke/todo-comments.nvim',
