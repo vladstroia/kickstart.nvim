@@ -35,7 +35,25 @@ require('lazy').setup({
       },
     },
   },
-
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup {
+        panel = {
+          auto_refresh = true,
+        },
+        suggestion = {
+          auto_trigger = true,
+          keymap = {
+            accept = '<C-CR>',
+            accept_word = '<C-Right>',
+          },
+        },
+      }
+    end,
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -467,14 +485,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
-
-          -- If you prefer more traditional completion keymaps,
-          -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
-
+          ['<C-CR>'] = cmp.mapping.confirm { select = true },
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
@@ -518,15 +529,6 @@ require('lazy').setup({
       vim.cmd [[colorscheme visual_studio_code]]
     end,
   },
-  -- {
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --     vim.cmd.hi 'Comment gui=none'
-  --   end,
-  -- },
 
   {
     'folke/todo-comments.nvim',
