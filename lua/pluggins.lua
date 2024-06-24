@@ -20,7 +20,16 @@ require('lazy').setup({
       end)
     end,
   },
-
+  {
+    'nvim-pack/nvim-spectre',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+  },
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+  },
   --
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -45,7 +54,7 @@ require('lazy').setup({
           auto_refresh = true,
         },
         suggestion = {
-          auto_trigger = true,
+          -- auto_trigger = true,
           keymap = {
             accept = '<C-CR>',
             accept_word = '<C-Right>',
@@ -142,11 +151,21 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          file_ignore_patterns = { '*.po', '*.pot' },
+          mappings = {
+            i = {
+              ["<C-Down>"] = require('telescope.actions').cycle_history_next,
+              ["<C-Up>"] = require('telescope.actions').cycle_history_prev,
+            },
+          },
+          layout_config = {
+              horizontal = {
+                  width = 0.99,
+                  height = 0.99,
+                },
+            },
+          },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -381,42 +400,42 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    lazy = false,
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_fallback = true }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        return {
-          timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-        }
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   lazy = false,
+  --   keys = {
+  --     {
+  --       '<leader>f',
+  --       function()
+  --         require('conform').format { async = true, lsp_fallback = true }
+  --       end,
+  --       mode = '',
+  --       desc = '[F]ormat buffer',
+  --     },
+  --   },
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = function(bufnr)
+  --       -- Disable "format_on_save lsp_fallback" for languages that don't
+  --       -- have a well standardized coding style. You can add additional
+  --       -- languages here or re-enable it for the disabled ones.
+  --       local disable_filetypes = { c = true, cpp = true, js = true }
+  --       return {
+  --         timeout_ms = 500,
+  --         lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+  --       }
+  --     end,
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use a sub-list to tell conform to run *until* a formatter
+  --       -- is found.
+  --       -- javascript = { { 'prettierd', 'prettier' } },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -651,26 +670,26 @@ require('lazy').setup({
 -- Function to show hover documentation
 
 -- Function to show hover documentation
-local function show_hover_doc()
-  local cursor_pos = vim.api.nvim_win_get_cursor(0)
-  vim.defer_fn(function()
-    -- Check if the cursor is still at the same position
-    local new_cursor_pos = vim.api.nvim_win_get_cursor(0)
-    if cursor_pos[1] == new_cursor_pos[1] and cursor_pos[2] == new_cursor_pos[2] then
-      vim.lsp.buf.hover()
-    end
-  end, 1200) -- 2000 milliseconds = 2 seconds
-end
-
--- Set up an autocommand group for hover documentation
-vim.api.nvim_create_augroup('HoverDoc', { clear = true })
-
--- Register the autocommand
-vim.api.nvim_create_autocmd('CursorHold', {
-  group = 'HoverDoc',
-  pattern = '*',
-  callback = show_hover_doc,
-})
-
--- Optional: Map 'K' to show hover documentation manually
-vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true, desc = 'Hover Documentation' })
+-- local function show_hover_doc()
+--   local cursor_pos = vim.api.nvim_win_get_cursor(0)
+--   vim.defer_fn(function()
+--     -- Check if the cursor is still at the same position
+--     local new_cursor_pos = vim.api.nvim_win_get_cursor(0)
+--     if cursor_pos[1] == new_cursor_pos[1] and cursor_pos[2] == new_cursor_pos[2] then
+--       vim.lsp.buf.hover()
+--     end
+--   end, 1200) -- 2000 milliseconds = 2 seconds
+-- end
+--
+-- -- Set up an autocommand group for hover documentation
+-- vim.api.nvim_create_augroup('HoverDoc', { clear = true })
+--
+-- -- Register the autocommand
+-- vim.api.nvim_create_autocmd('CursorHold', {
+--   group = 'HoverDoc',
+--   pattern = '*',
+--   callback = show_hover_doc,
+-- })
+--
+-- -- Optional: Map 'K' to show hover documentation manually
+-- vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true, desc = 'Hover Documentation' })

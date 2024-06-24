@@ -1,4 +1,5 @@
 -- Set <space> as the leader key
+--  
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
@@ -23,9 +24,12 @@ local function toggle_line_numbers()
 end
 vim.api.nvim_create_user_command('ToggleLineNumbers', toggle_line_numbers, {})
 vim.keymap.set('n', '<leader>tn', ':ToggleLineNumbers<CR>', { noremap = true, silent = true, desc = 'Toggle Line Numbers' })
-
+vim.o.autowriteall = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
+
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -146,13 +150,37 @@ vim.opt['shiftwidth'] = 4
 require 'my_config'
 
 -- vim.keymap.set('n', '<leader>o', '<CMD>Oil<CR><C-p>', { desc = 'Open Oil.nvim with preview mode' })
-
 vim.keymap.set('n', '<leader>o', function()
-  vim.cmd 'Oil'
-  vim.schedule(function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n', true)
-  end)
+  -- vim.cmd 'Oil'
+  require("oil").open()
+  -- require("oil").get_cursor_entry()
+  require("oil").open_preview()
+
 end, { desc = 'Open Oil.nvim with preview mode' })
+
+-- vim.api.nvim_create_autocmd({'BufWritePost'}, {
+--   pattern = '*.js',
+--   callback = function()
+--     local eslint_config_path = '/home/vlad/odoo-src/odoo/addons/web/tooling/_eslintrc.json'
+--     local file_path = vim.fn.expand('%:p')  -- Get the absolute path of the current file
+--     local command = string.format('eslint --no-ignore --fix --no-eslintrc -c %s %s',
+--                                   vim.fn.shellescape(eslint_config_path),
+--                                   vim.fn.shellescape(file_path))
+--     os.execute(command)
+--     -- Force save the buffer to reflect ESLint changes
+--     -- vim.cmd('write!')
+--     -- -- Reload the current buffer
+--     vim.cmd('e!')
+--   end,
+-- })
+-- vim.api.nvim_create_autocmd('BufLeave', {
+--   pattern = '*',
+--   callback = function()
+--     -- Save all buffers when focus is lost
+--     vim.cmd('wa')
+--   end,
+-- })
 --
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
